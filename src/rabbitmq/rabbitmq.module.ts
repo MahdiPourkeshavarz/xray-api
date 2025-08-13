@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { RabbitmqService } from './rabbitmq.service';
-import { SignalsService } from 'src/signals/signals.service';
+import { SignalsModule } from 'src/signals/signals.module';
 
 @Module({
   providers: [RabbitmqService],
-  imports: [SignalsService],
+  imports: [SignalsModule],
 })
 export class RabbitmqModule {}

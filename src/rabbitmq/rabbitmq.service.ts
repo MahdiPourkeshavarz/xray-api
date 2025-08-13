@@ -56,6 +56,10 @@ export class RabbitmqService implements OnModuleInit {
 
           this.logger.log(`Processing signal from device: ${deviceId}`);
 
+          console.log(
+            `Received message for device ${deviceId} at ${time.toISOString()} with data length ${dataLength} and volume ${dataVolume} bytes`,
+          );
+
           await this.signalService.create({
             deviceId,
             time,

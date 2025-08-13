@@ -6,10 +6,10 @@ export type SignalDocument = HydratedDocument<Signal>;
 
 @Schema({ timestamps: true })
 export class Signal {
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   deviceId: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   time: Date;
 
   @Prop({ required: true })
@@ -18,4 +18,6 @@ export class Signal {
   @Prop({ required: true })
   dataVolume: number;
 }
+
 export const SignalSchema = SchemaFactory.createForClass(Signal);
+SignalSchema.index({ deviceId: 1, time: -1 });
