@@ -1,16 +1,22 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { connect, Connection, Channel } from 'amqplib';
 import { ConfigService } from '@nestjs/config';
+import { SignalsService } from 'src/signals/signals.service';
 
 @Injectable()
 export class RabbitmqService implements OnModuleInit {
   private connection!: Connection;
   private channel!: Channel;
+  private readonly logger = new Logger(RabbitmqService.name);
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly signalService: SignalsService,
+  ) {}
 
   async onModuleInit() {
     await this.connect();
@@ -36,12 +42,31 @@ export class RabbitmqService implements OnModuleInit {
       await this.channel.assertQueue(queue, { durable: true });
       console.log(`Queue ${queue} is ready`);
 
-      await this.channel.consume(queue, (msg) => {
-        if (msg !== null) {
-          console.log(`Received message: ${msg.content.toString()}`);
+      await this.channel.consume(queue, async (msg) => {
+        try {
+          const rawMessage = msg.content.toString();
+          const dataVolume = msg.content.byteLength;
+
+          const parsedData = JSON.parse(rawMessage);
+
+          const deviceId = Object.keys(parsedData)[0];
+          const signalData = parsedData[deviceId];
+          const time = new Date(signalData.time);
+          const dataLength = signalData.data.length;
+
+          this.logger.log(`Processing signal from device: ${deviceId}`);
+
+          await this.signalService.create({
+            deviceId,
+            time,
+            dataLength,
+            dataVolume,
+          });
+
           this.channel.ack(msg);
-        } else {
-          console.warn('Received null message');
+        } catch (error) {
+          this.logger.error('Failed to process message', error);
+          this.channel.nack(msg, false, false);
         }
       });
     } catch (error) {
