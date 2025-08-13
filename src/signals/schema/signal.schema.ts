@@ -17,6 +17,15 @@ export class Signal {
 
   @Prop({ required: true })
   dataVolume: number;
+
+  @Prop({ required: true })
+  averageSpeed: number;
+
+  @Prop({ required: true })
+  durationMs: number;
+
+  @Prop({ required: true })
+  maxSpeed: number;
 }
 
 export const SignalSchema = SchemaFactory.createForClass(Signal);

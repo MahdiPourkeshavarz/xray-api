@@ -29,8 +29,20 @@ export class SignalsController {
     @Query('deviceId') deviceId?: string,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
+    @Query('minAverageSpeed') minAverageSpeed?: number,
+    @Query('maxAverageSpeed') maxAverageSpeed?: number,
+    @Query('minDurationMs') minDurationMs?: number,
+    @Query('maxDurationMs') maxDurationMs?: number,
   ) {
-    return this.signalsService.findAll({ deviceId, startDate, endDate });
+    return this.signalsService.findAll({
+      deviceId,
+      startDate,
+      endDate,
+      minAverageSpeed,
+      maxAverageSpeed,
+      minDurationMs,
+      maxDurationMs,
+    });
   }
 
   @Get(':id')

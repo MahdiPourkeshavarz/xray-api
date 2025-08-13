@@ -22,21 +22,31 @@ export class SignalsService {
   }
 
   async findAll(filters: FindAllFilters): Promise<Signal[]> {
-    const { deviceId, startDate, endDate } = filters;
     const queryFilter: any = {};
 
-    if (deviceId) {
-      queryFilter.deviceId = deviceId;
+    if (filters.deviceId) {
+      queryFilter.deviceId = filters.deviceId;
+    }
+    if (filters.startDate || filters.endDate) {
+      queryFilter.time = {};
+      if (filters.startDate)
+        queryFilter.time.$gte = new Date(filters.startDate);
+      if (filters.endDate) queryFilter.time.$lte = new Date(filters.endDate);
     }
 
-    if (startDate || endDate) {
-      queryFilter.time = {};
-      if (startDate) {
-        queryFilter.time.$gte = new Date(startDate);
-      }
-      if (endDate) {
-        queryFilter.time.$lte = new Date(endDate);
-      }
+    if (filters.minAverageSpeed || filters.maxAverageSpeed) {
+      queryFilter.averageSpeed = {};
+      if (filters.minAverageSpeed)
+        queryFilter.averageSpeed.$gte = filters.minAverageSpeed;
+      if (filters.maxAverageSpeed)
+        queryFilter.averageSpeed.$lte = filters.maxAverageSpeed;
+    }
+    if (filters.minDurationMs || filters.maxDurationMs) {
+      queryFilter.durationMs = {};
+      if (filters.minDurationMs)
+        queryFilter.durationMs.$gte = filters.minDurationMs;
+      if (filters.maxDurationMs)
+        queryFilter.durationMs.$lte = filters.maxDurationMs;
     }
 
     return this.signalModel.find(queryFilter).sort({ time: -1 }).exec();
