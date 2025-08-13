@@ -18,13 +18,13 @@ export class Signal {
   @Prop({ required: true })
   dataVolume: number;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   averageSpeed: number;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   durationMs: number;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   maxSpeed: number;
 }
 
