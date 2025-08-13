@@ -1,0 +1,173 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-4a7b-8c9d-1f2a3b4c5d6e",
+    "name": "PANTOhealth X-Ray API (Advanced)",
+    "description": "A collection of API requests for the PANTOhealth signals service, covering all CRUD operations and advanced filtering for calculated metrics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Signals (No Filter)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/signals",
+          "host": ["{{baseUrl}}"],
+          "path": ["signals"]
+        },
+        "description": "Retrieves a list of all signal documents stored in the database."
+      },
+      "response": []
+    },
+    {
+      "name": "Advanced Filtering",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/signals?deviceId=postman-test-device-01&startDate=2025-01-01&minAverageSpeed=2.5&minDurationMs=1500",
+          "host": ["{{baseUrl}}"],
+          "path": ["signals"],
+          "query": [
+            {
+              "key": "deviceId",
+              "value": "postman-test-device-01",
+              "description": "Filter signals by a specific device ID."
+            },
+            {
+              "key": "startDate",
+              "value": "2025-01-01",
+              "description": "Find signals that occurred on or after this date."
+            },
+            {
+              "key": "endDate",
+              "value": "",
+              "description": "Find signals that occurred on or before this date."
+            },
+            {
+              "key": "minAverageSpeed",
+              "value": "2.5",
+              "description": "Filter by minimum average speed."
+            },
+            {
+              "key": "maxAverageSpeed",
+              "value": "",
+              "description": "Filter by maximum average speed."
+            },
+            {
+              "key": "minDurationMs",
+              "value": "1500",
+              "description": "Filter by minimum scan duration in milliseconds."
+            },
+            {
+              "key": "maxDurationMs",
+              "value": "",
+              "description": "Filter by maximum scan duration in milliseconds."
+            }
+          ]
+        },
+        "description": "Retrieves signals based on advanced filter criteria."
+      },
+      "response": []
+    },
+    {
+      "name": "Create a new Signal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": \"postman-test-device-01\",\n  \"time\": \"2025-08-12T10:00:00.000Z\",\n  \"dataLength\": 150,\n  \"dataVolume\": 2048,\n  \"averageSpeed\": 3.14,\n  \"durationMs\": 2500,\n  \"maxSpeed\": 5.2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/signals",
+          "host": ["{{baseUrl}}"],
+          "path": ["signals"]
+        },
+        "description": "Creates a new signal document. Note: In the final app, this is primarily handled by the RabbitMQ consumer."
+      },
+      "response": []
+    },
+    {
+      "name": "Get a single Signal by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/signals/{{signalId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["signals", "{{signalId}}"]
+        },
+        "description": "Retrieves a single signal document by its unique MongoDB _id."
+      },
+      "response": []
+    },
+    {
+      "name": "Update a Signal",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"dataLength\": 155,\n    \"dataVolume\": 2100\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/signals/{{signalId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["signals", "{{signalId}}"]
+        },
+        "description": "Updates a signal's non-calculated metadata."
+      },
+      "response": []
+    },
+    {
+      "name": "Delete a Signal",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/signals/{{signalId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["signals", "{{signalId}}"]
+        },
+        "description": "Deletes a signal document from the database by its unique ID."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "signalId",
+      "value": "paste_a_valid_id_here",
+      "type": "string"
+    }
+  ]
+}
