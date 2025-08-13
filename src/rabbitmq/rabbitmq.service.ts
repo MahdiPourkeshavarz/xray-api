@@ -50,6 +50,11 @@ export class RabbitmqService implements OnModuleInit {
 
           const deviceId = Object.keys(parsedData)[0];
           const signalData = parsedData[deviceId];
+          if (!signalData || typeof signalData.time === 'undefined') {
+            this.logger.error(`Malformed message for device: ${deviceId}`);
+            this.channel.nack(msg, false, false); // reject the message
+            return;
+          }
           const time = new Date(signalData.time);
 
           const dataPoints = Array.isArray(signalData.data)
