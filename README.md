@@ -109,6 +109,8 @@ All endpoints are prefixed with `/signals`.
 http://localhost:3000/signals?deviceId=some-device-id&startDate=2025-01-01&minAverageSpeed=2.5
 ```
 
+## you can use postman.config.json to access all endpoints!
+
 ---
 
 ## Assumptions and Design Decisions
