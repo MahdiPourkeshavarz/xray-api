@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { RabbitmqService } from './rabbitmq.service';
 
 @Module({
-  providers: [RabbitmqService]
+  providers: [RabbitmqService],
 })
 export class RabbitmqModule {}
