@@ -5,7 +5,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { connect, Connection, Channel } from 'amqplib';
 import { ConfigService } from '@nestjs/config';
-import { SignalsService } from 'src/signals/signals.service';
+import { SignalsService } from '../signals/signals.service';
 
 @Injectable()
 export class RabbitmqService implements OnModuleInit {
